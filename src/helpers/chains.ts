@@ -1,0 +1,68 @@
+import { IChainData } from "../helpers/types";
+
+export const SUPPORTED_CHAINS: IChainData[] = [
+  {
+    name: "Polygon Mainnet",
+    chain: "Polygon",
+    network: "mainnet",
+    rpc_url: "https://rpc-mainnet.maticvigil.com",
+    native_currency: {
+      name: "MATIC",
+      symbol: "MATIC",
+      decimals: "18",
+      contractAddress: "",
+      balance: "",
+    },
+    short_name: "MATIC",
+    chain_id: 137,
+    network_id: 137,
+  },
+  {
+    name: "Avalanche Mainnet",
+    chain: "AVAX",
+    network: "mainnet",
+    rpc_url: "https://api.avax.network/ext/bc/C/rpc",
+    native_currency: {
+      name: "Avalanche",
+      symbol: "AVAX",
+      decimals: "18",
+      contractAddress: "",
+      balance: "",
+    },
+    short_name: "Avalanche",
+    chain_id: 43114,
+    network_id: 43114,
+  },
+  {
+    name: "Fantom Mainnet",
+    chain: "Fantom",
+    network: "mainnet",
+    rpc_url: "https://rpc.ftm.tools/",
+    native_currency: {
+      name: "FTM",
+      symbol: "FTM",
+      decimals: "18",
+      contractAddress: "",
+      balance: "",
+    },
+    short_name: "FTM",
+    chain_id: 250,
+    network_id: 250,
+  },
+  {
+    name: "BSC Mainnet",
+    chain: "BSC",
+    network: "mainnet",
+    rpc_url: "https://bsc-dataseed1.defibit.io/",
+    native_currency: {
+      name: "BSC",
+      symbol: "BSC",
+      decimals: "18",
+      contractAddress: "",
+      balance: "",
+    },
+    short_name: "BSC",
+    chain_id: 56,
+    network_id: 56,
+  },
+];
