@@ -151,7 +151,7 @@ class App extends React.Component<any, any> {
 
   public connect = async () => {
     // bridge url
-    const bridge = "http://bridge.plena.finance/";
+    const bridge = "https://bridge.plena.finance/";
 
     // create new connector
     const connector = new PlenaConnect({
@@ -320,13 +320,13 @@ class App extends React.Component<any, any> {
             {!address ? (
               <SLanding center>
                 <h3>
-                  {`Try out PlenaConnect`}
+                  {`PlenaConnect`}
                   <br />
                   <span>{`v${process.env.REACT_APP_VERSION}`}</span>
                 </h3>
                 <SButtonContainer>
                   <SConnectButton left onClick={this.connect} fetching={fetching}>
-                    {"Connect to PlenaConnect"}
+                    {"Connect"}
                   </SConnectButton>
                 </SButtonContainer>
               </SLanding>
