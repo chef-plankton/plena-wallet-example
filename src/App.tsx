@@ -10,10 +10,16 @@ import Modal from "./components/Modal";
 import Header from "./components/Header";
 import Loader from "./components/Loader";
 import { fonts } from "./styles";
+import { IPlenaTxData } from "@plenaconnect/types";
+import Web3 from "web3";
+import { AbiItem } from "web3-utils";
 
 import Banner from "./components/Banner";
 import { convertUtf8ToHex } from "@plenaconnect/utils";
 import { verifySignature, hashMessage } from "./helpers/utilities";
+
+const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc-mainnet.matic.quiknode.pro/"));
+console.log("initialised web3", web3);
 
 const SLayout = styled.div`
   position: relative;
@@ -114,7 +120,7 @@ const STestButton = styled(Button as any)`
   font-size: ${fonts.size.medium};
   height: 44px;
   width: 100%;
-  max-width: 175px;
+  max-width: 250px;
   margin: 12px;
 `;
 
@@ -305,6 +311,121 @@ class App extends React.Component<any, any> {
     }
   };
 
+  public testPlenaTransaction = async () => {
+    const { connector, address } = this.state;
+
+    if (!connector) {
+      return;
+    }
+
+    // // from
+    // const from = address;
+
+    const lendingPool = "0x8dFf5E27EA6b7AC08EbFdf9eB090F32ee9a30fcf";
+    const USDC = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F";
+    const swAddress = "0xCDD396C9Eb08A285685Caa3724C4a8d3DaE13D28";
+    const abi1 = {
+      inputs: [
+        {
+          internalType: "address",
+          name: "spender",
+          type: "address",
+        },
+        {
+          internalType: "uint256",
+          name: "amount",
+          type: "uint256",
+        },
+      ],
+      name: "approve",
+      outputs: [
+        {
+          internalType: "bool",
+          name: "",
+          type: "bool",
+        },
+      ],
+      stateMutability: "nonpayable",
+      type: "function",
+    };
+
+    const txnData1 = web3.eth.abi.encodeFunctionCall(abi1 as AbiItem, [lendingPool, "1000000"]);
+
+    const abi2 = {
+      inputs: [
+        {
+          internalType: "address",
+          name: "asset",
+          type: "address",
+        },
+        {
+          internalType: "uint256",
+          name: "amount",
+          type: "uint256",
+        },
+        {
+          internalType: "address",
+          name: "onBehalfOf",
+          type: "address",
+        },
+        {
+          internalType: "uint16",
+          name: "referralCode",
+          type: "uint16",
+        },
+      ],
+      name: "deposit",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    };
+
+    const txnData2 = web3.eth.abi.encodeFunctionCall(abi2 as AbiItem, [
+      USDC,
+      "100000",
+      swAddress,
+      "0",
+    ]);
+
+    // Draft transaction
+    const tx: IPlenaTxData = {
+      from: address,
+      encodedData: [txnData1, txnData2],
+      to: [USDC, lendingPool],
+      tokens: ["", ""],
+      amounts: ["0x0", "0x0"],
+    };
+
+    try {
+      // open modal
+      this.toggleModal();
+
+      // toggle pending request indicator
+      this.setState({ pendingRequest: true });
+
+      // send transaction
+      const result = await connector.sendTransactionToPlena(tx);
+      console.log(result);
+
+      // format displayed result
+      const formattedResult = {
+        method: "eth_sendTransactionToPlena",
+        txHash: result,
+        from: address,
+      };
+
+      // display result
+      this.setState({
+        connector,
+        pendingRequest: false,
+        result: formattedResult || null,
+      });
+    } catch (error) {
+      console.error(error);
+      this.setState({ connector, pendingRequest: false, result: null });
+    }
+  };
+
   public render = () => {
     const { address, connected, chainId, fetching, showModal, pendingRequest, result } = this.state;
     return (
@@ -338,6 +459,11 @@ class App extends React.Component<any, any> {
                   <STestButtonContainer>
                     <STestButton left onClick={this.testPersonalSignMessage}>
                       {"personal_sign"}
+                    </STestButton>
+                  </STestButtonContainer>
+                  <STestButtonContainer>
+                    <STestButton left onClick={this.testPlenaTransaction}>
+                      {"eth_sendPlenaTransaction"}
                     </STestButton>
                   </STestButtonContainer>
                 </Column>
