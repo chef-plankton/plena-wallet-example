@@ -323,7 +323,7 @@ class App extends React.Component<any, any> {
 
     const lendingPool = "0x8dFf5E27EA6b7AC08EbFdf9eB090F32ee9a30fcf";
     const USDC = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F";
-    const swAddress = "0xCDD396C9Eb08A285685Caa3724C4a8d3DaE13D28";
+    const swAddress = address;
     const abi1 = {
       inputs: [
         {
