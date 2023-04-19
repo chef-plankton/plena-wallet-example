@@ -141,7 +141,7 @@ const INITIAL_STATE: IAppState = {
   connector: null,
   fetching: false,
   connected: false,
-  chainId: 1,
+  chainId: 56,
   showModal: false,
   pendingRequest: false,
   uri: "",
@@ -199,6 +199,9 @@ class App extends React.Component<any, any> {
     });
 
     connector.on("connect", (error, payload) => {
+      console.log("here");
+      console.log(payload);
+      
       if (error) {
         throw error;
       }
